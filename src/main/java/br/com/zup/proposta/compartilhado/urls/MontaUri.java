@@ -13,7 +13,7 @@ public class MontaUri {
      * @param recurso: Inserir o subdomínio sem o "/"
      * @param id: Id do recurso que foi criado
      */
-    public URI montaUriResponseCreated(String recurso, Long id) {
+    public URI created(String recurso, Long id) {
         String host = "www.linktemporario/api";
         String path = recurso+ "/" +id;
         return UriComponentsBuilder.newInstance()

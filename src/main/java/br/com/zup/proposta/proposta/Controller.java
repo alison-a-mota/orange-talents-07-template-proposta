@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -24,11 +25,17 @@ public class Controller {
     }
 
     @PostMapping
-    public ResponseEntity<URI> cria(@RequestBody @Valid PropostaRequest propostaRequest){
+    public ResponseEntity<URI> cria(@RequestBody @Valid PropostaRequest propostaRequest) {
+
+        if (propostaRepository.existsByDocumento(propostaRequest.getDocumento())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Encontramos uma proposta para esse endereço.");
+        }
+
         Proposta proposta = propostaRequest.toModel();
         propostaRepository.save(proposta);
 
-        URI uri = montaUri.montaUriResponseCreated("proposta", proposta.getId());
+        URI uri = montaUri.created("proposta", proposta.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri).build();
