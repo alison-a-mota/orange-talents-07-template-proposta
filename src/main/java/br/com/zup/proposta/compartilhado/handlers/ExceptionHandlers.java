@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +34,10 @@ public class ExceptionHandlers {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> interceptaBeanValidation(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ConnectException.class)
+    public ResponseEntity<String> interceptaQuedaConexoesExternas(ConnectException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não houve resposta do client.");
     }
 }
