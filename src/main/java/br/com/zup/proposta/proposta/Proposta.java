@@ -51,14 +51,19 @@ public class Proposta {
 
     public void analisaEAtualizaStatus(ClientAnalise clientAnalise) {
 
+        AnaliseRequest request = new AnaliseRequest(this);
+
         try {
-            AnaliseResponse analiseResponse = clientAnalise.analisaSolicitacao(
-                    new AnaliseRequest(this));
+            AnaliseResponse analiseResponse = clientAnalise.analisaSolicitacao(request);
             atualizaStatus(analiseResponse.getStatus());
         } catch (FeignException ex) {
-            atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Deu um erro estranho");
+
+            if (ex.status() == HttpStatus.UNPROCESSABLE_ENTITY.value()) {
+                atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
+            } else {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Houve um problema com a requisição");
+            }
         }
     }
 
