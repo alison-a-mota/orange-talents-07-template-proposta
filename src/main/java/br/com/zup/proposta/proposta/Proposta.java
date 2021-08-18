@@ -56,14 +56,8 @@ public class Proposta {
         try {
             AnaliseResponse analiseResponse = clientAnalise.analisaSolicitacao(request);
             atualizaStatus(analiseResponse.getStatus());
-        } catch (FeignException ex) {
-
-            if (ex.status() == HttpStatus.UNPROCESSABLE_ENTITY.value()) {
-                atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
-            } else {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Houve um problema com a requisição");
-            }
+        } catch (FeignException.UnprocessableEntity ex) {
+            atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
         }
     }
 
