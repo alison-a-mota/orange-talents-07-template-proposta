@@ -52,7 +52,11 @@ public class PropostaController {
 
     @GetMapping("/{propostaId}")
     public ResponseEntity<PropostaResponse> detalha(@PathVariable Long propostaId){
-        return null;
+        Proposta proposta = propostaRepository.findById(propostaId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Não encontramos uma proposta com esse Id."));
+
+        return ResponseEntity.status(HttpStatus.OK).body(new PropostaResponse(proposta));
     }
 
 

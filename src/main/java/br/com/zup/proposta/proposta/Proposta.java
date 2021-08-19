@@ -71,7 +71,6 @@ public class Proposta {
         propostaStatus = status;
     }
 
-
     @Deprecated
     public Proposta() {
     }
@@ -90,5 +89,9 @@ public class Proposta {
 
     public Cartao getCartao() {
         return cartao;
+    }
+
+    public PropostaStatus getPropostaStatus() {
+        return propostaStatus;
     }
 }
