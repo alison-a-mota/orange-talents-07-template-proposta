@@ -5,6 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public enum PropostaStatus {
 
+    CARTAO_EMITIDO,
     NAO_ELEGIVEL,
     ELEGIVEL;
 

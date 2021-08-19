@@ -3,6 +3,7 @@ package br.com.zup.proposta.cartao;
 import br.com.zup.proposta.proposta.Proposta;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Cartao {
@@ -10,8 +11,9 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String numeroCartao;
-    @OneToOne
+    @OneToOne(mappedBy = "cartao")
     private Proposta proposta;
 
     public Cartao(String numeroCartao, Proposta proposta) {
@@ -21,14 +23,5 @@ public class Cartao {
 
     @Deprecated
     public Cartao() {
-    }
-
-    @Override
-    public String toString() {
-        return "Cartao{" +
-                "id=" + id +
-                ", numeroCartao='" + numeroCartao + '\'' +
-                ", proposta=" + proposta +
-                '}';
     }
 }

@@ -5,29 +5,27 @@ import br.com.zup.proposta.proposta.Proposta;
 import br.com.zup.proposta.proposta.PropostaRepository;
 import br.com.zup.proposta.proposta.PropostaStatus;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class CartaoService {
+@Component
+public class CartaoConsultaClient {
 
     private final PropostaRepository propostaRepository;
-    private final CartaoRepository cartaoRepository;
     private final ClientCartao clientCartao;
 
-    public CartaoService(PropostaRepository propostaRepository, CartaoRepository cartaoRepository, ClientCartao clientCartao) {
+    public CartaoConsultaClient(PropostaRepository propostaRepository,
+                                ClientCartao clientCartao) {
         this.propostaRepository = propostaRepository;
-        this.cartaoRepository = cartaoRepository;
         this.clientCartao = clientCartao;
     }
 
     @Scheduled(fixedDelayString = "${api.cartoes.delay.getcartoes}")
     private void consultaClientCartao() {
 
-        System.out.println("Ping");
-
+        //Localiza as propostas que estão com status ELEGIVEL e sem cartão emitido
         List<Proposta> propostas = propostaRepository
                 .findAllByPropostaStatus(PropostaStatus.ELEGIVEL)
                 .stream().filter(proposta -> proposta.getCartao() == null)
@@ -37,9 +35,8 @@ public class CartaoService {
             CartaoResponseClient response = clientCartao.getCartoes(proposta.getId().toString());
             if (response.getId() != null) {
                 Cartao cartao = response.toModel(proposta);
-                cartaoRepository.save(cartao);
-
-                System.out.println("foi");
+                proposta.setCartaoEAtualizaStatus(cartao);
+                propostaRepository.save(proposta);
             }
         });
     }

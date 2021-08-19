@@ -40,7 +40,7 @@ public class Proposta {
     @Enumerated(value = EnumType.STRING)
     private PropostaStatus propostaStatus;
 
-    @OneToOne(mappedBy = "proposta")
+    @OneToOne(cascade = CascadeType.ALL)
     private Cartao cartao;
 
     public Proposta(String nome, String email, String documento, BigDecimal salario, Endereco endereco) {
@@ -51,8 +51,12 @@ public class Proposta {
         this.endereco = endereco;
     }
 
-    public void analisaEAtualizaStatus(ClientAnalise clientAnalise) {
+    public void setCartaoEAtualizaStatus(Cartao cartao){
+        this.cartao = cartao;
+        this.propostaStatus = PropostaStatus.CARTAO_EMITIDO;
+    }
 
+    public void analisaEAtualizaStatus(ClientAnalise clientAnalise) {
         AnaliseRequest request = new AnaliseRequest(this);
 
         try {
@@ -66,6 +70,7 @@ public class Proposta {
     private void atualizaStatus(PropostaStatus status) {
         propostaStatus = status;
     }
+
 
     @Deprecated
     public Proposta() {
@@ -85,14 +90,5 @@ public class Proposta {
 
     public Cartao getCartao() {
         return cartao;
-    }
-
-    @Override
-    public String toString() {
-        return "Proposta{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cartao=" + cartao +
-                '}';
     }
 }
