@@ -1,7 +1,7 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.compartilhado.urls.MontaUri;
-import br.com.zup.proposta.proposta.analise.ClientAnalise;
+import br.com.zup.proposta.clients.ClientAnalise;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

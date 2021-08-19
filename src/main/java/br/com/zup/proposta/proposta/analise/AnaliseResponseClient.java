@@ -2,14 +2,14 @@ package br.com.zup.proposta.proposta.analise;
 
 import br.com.zup.proposta.proposta.PropostaStatus;
 
-public class AnaliseResponse {
+public class AnaliseResponseClient {
 
     private final String idProposta;
     private final String nome;
     private final String documento;
     private final String resultadoSolicitacao;
 
-    public AnaliseResponse(String idProposta, String nome, String documento, String resultadoSolicitacao) {
+    public AnaliseResponseClient(String idProposta, String nome, String documento, String resultadoSolicitacao) {
         this.idProposta = idProposta;
         this.nome = nome;
         this.documento = documento;

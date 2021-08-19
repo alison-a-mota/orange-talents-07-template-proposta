@@ -37,7 +37,7 @@ public class ExceptionHandlers {
     }
 
     @ExceptionHandler(ConnectException.class)
-    public ResponseEntity<String> interceptaQuedaConexoesExternas(ConnectException exception){
+    public ResponseEntity<String> interceptaQuedaConexoesExternas(ConnectException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não houve resposta do client.");
     }
 }

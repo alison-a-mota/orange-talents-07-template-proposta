@@ -1,12 +1,11 @@
 package br.com.zup.proposta.proposta;
 
+import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 import br.com.zup.proposta.proposta.analise.AnaliseRequest;
-import br.com.zup.proposta.proposta.analise.AnaliseResponse;
-import br.com.zup.proposta.proposta.analise.ClientAnalise;
+import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;
+import br.com.zup.proposta.clients.ClientAnalise;
 import feign.FeignException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -41,6 +40,9 @@ public class Proposta {
     @Enumerated(value = EnumType.STRING)
     private PropostaStatus propostaStatus;
 
+    @OneToOne(mappedBy = "proposta")
+    private Cartao cartao;
+
     public Proposta(String nome, String email, String documento, BigDecimal salario, Endereco endereco) {
         this.nome = nome;
         this.email = email;
@@ -54,7 +56,7 @@ public class Proposta {
         AnaliseRequest request = new AnaliseRequest(this);
 
         try {
-            AnaliseResponse analiseResponse = clientAnalise.analisaSolicitacao(request);
+            AnaliseResponseClient analiseResponse = clientAnalise.analisaSolicitacao(request);
             atualizaStatus(analiseResponse.getStatus());
         } catch (FeignException.UnprocessableEntity ex) {
             atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
@@ -79,5 +81,18 @@ public class Proposta {
 
     public String getDocumento() {
         return documento;
+    }
+
+    public Cartao getCartao() {
+        return cartao;
+    }
+
+    @Override
+    public String toString() {
+        return "Proposta{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cartao=" + cartao +
+                '}';
     }
 }
