@@ -2,6 +2,7 @@ package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.clients.ClientAnalise;
+import br.com.zup.proposta.compartilhado.anotacoes.CampoUnico;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 import br.com.zup.proposta.proposta.analise.AnaliseRequest;
 import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;
@@ -30,6 +31,7 @@ public class Proposta {
     private String email;
     @NotBlank
     @CpfOuCnpj
+    @CampoUnico(fieldName = "documento", domainClass = Proposta.class)
     private String documento;
     @NotNull
     @Positive

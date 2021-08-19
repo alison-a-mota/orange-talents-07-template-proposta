@@ -28,7 +28,7 @@ public class PropostaController {
     @PostMapping
     public ResponseEntity<URI> cria(@RequestBody @Valid PropostaRequest propostaRequest) {
 
-        //Valida se já existe uma proposta para esse documento
+        //Valida se já existe uma proposta para esse documento e retorna 422 se existir.
         if (propostaRepository.existsByDocumento(propostaRequest.getDocumento())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                     "Encontramos uma proposta para esse documento.");
