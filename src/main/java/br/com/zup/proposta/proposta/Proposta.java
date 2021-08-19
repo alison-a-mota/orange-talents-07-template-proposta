@@ -1,11 +1,12 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.cartao.Cartao;
+import br.com.zup.proposta.clients.ClientAnalise;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 import br.com.zup.proposta.proposta.analise.AnaliseRequest;
 import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;
-import br.com.zup.proposta.clients.ClientAnalise;
 import feign.FeignException;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -51,7 +52,11 @@ public class Proposta {
         this.endereco = endereco;
     }
 
-    public void setCartaoEAtualizaStatus(Cartao cartao){
+    public void setCartaoEAtualizaStatus(Cartao cartao) {
+
+        Assert.isTrue(PropostaStatus.ELEGIVEL.equals(propostaStatus),
+                "Essa proposta não está elegível para gerar um cartão.");
+
         this.cartao = cartao;
         this.propostaStatus = PropostaStatus.CARTAO_EMITIDO;
     }
