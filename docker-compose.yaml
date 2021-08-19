@@ -1,6 +1,22 @@
 version: '3'
 
+networks:
+  production-network:
+
 services:
+
+  proposta-webservice:
+    image: alisonalvesmota/proposta
+    ports:
+      - 8081:8080
+    environment:
+      URL_DATABASE: jdbc:postgresql://postgres_proposta:5433/propostas?useTimezone=true&serverTimezone=America/Sao_Paulo
+      DB_USER: propostas
+      DB_PASSWORD: password
+    depends_on:
+      - postgres_proposta
+    networks:
+      - production-network
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"
@@ -8,6 +24,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
+    networks:
+      - production-network
 
   kafka:
     image: "confluentinc/cp-kafka:5.2.1"
@@ -22,6 +40,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - production-network
 
   postgres:
     image: 'postgres:9.6-alpine'
@@ -34,6 +54,8 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
+    networks:
+      - production-network
 
   postgres_proposta:
     image: 'postgres:9.6-alpine'
@@ -46,6 +68,8 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: propostas
       POSTGRES_HOST: postgres
+    networks:
+      - production-network
 
   keycloak:
     image: jboss/keycloak:11.0.0
@@ -75,6 +99,8 @@ services:
       KEYCLOAK_PASSWORD: Pa55w0rd
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
     restart: on-failure
+    networks:
+      - production-network
 
   analise:
     image: 'zupacademy/analise-financeira'
@@ -85,6 +111,8 @@ services:
       LOG_LEVEL: INFO
       URL_SISTEMA_CARTAO: http://contas:8888/api/cartoes
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+    networks:
+      - production-network
 
   contas:
     image: 'zupacademy/contas'
@@ -94,6 +122,8 @@ services:
       SERVER_PORT: 8888
       LOG_LEVEL: INFO
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+    networks:
+      - production-network
 
   transacoes:
     image: 'zupacademy/transacoes'
@@ -106,6 +136,8 @@ services:
       LOG_LEVEL: INFO
       KAFKA_HOST: "kafka:29092"
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+    networks:
+      - production-network
 
   jaeger:
     image: jaegertracing/all-in-one:1.21.0
@@ -120,6 +152,8 @@ services:
       - 9411:9411
     environment:
       COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+    networks:
+      - production-network
 
   prometheus:
     image: prom/prometheus:v2.22.0
@@ -128,6 +162,8 @@ services:
      - prometheus-volume:/etc/prometheus/
     ports:
       - "9090:9090"
+    networks:
+      - production-network
 
   grafana:
     image: grafana/grafana:7.3.4
@@ -137,6 +173,8 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+    networks:
+      - production-network
 
   vault:
     image: vault:1.5.3
@@ -146,6 +184,8 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+    networks:
+      - production-network
 
 volumes:
   grafana-volume:
