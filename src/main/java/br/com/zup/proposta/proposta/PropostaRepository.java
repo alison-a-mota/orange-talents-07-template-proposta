@@ -7,5 +7,5 @@ import java.util.List;
 public interface PropostaRepository extends JpaRepository<Proposta, Long> {
     boolean existsByDocumento(String documento);
 
-    List<Proposta> findAllByPropostaStatus(PropostaStatus elegivel);
+    List<Proposta> findFirst100ByPropostaStatus(PropostaStatus elegivel);
 }

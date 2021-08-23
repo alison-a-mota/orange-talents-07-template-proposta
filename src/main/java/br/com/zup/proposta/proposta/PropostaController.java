@@ -1,9 +1,6 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.clients.ClientAnalise;
-import br.com.zup.proposta.proposta.analise.AnaliseRequest;
-import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;
-import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +40,7 @@ public class PropostaController {
         URI uri = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("www.linktemporario/api")
-                .path("proposta/" +proposta.getId())
+                .path("proposta/" + proposta.getId())
                 .buildAndExpand().toUri();
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -51,13 +48,11 @@ public class PropostaController {
     }
 
     @GetMapping("/{propostaId}")
-    public ResponseEntity<PropostaResponse> detalha(@PathVariable Long propostaId){
+    public ResponseEntity<PropostaResponse> detalha(@PathVariable Long propostaId) {
         Proposta proposta = propostaRepository.findById(propostaId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Não encontramos uma proposta com esse Id."));
+                        "Não encontramos uma proposta com esse Id."));
 
         return ResponseEntity.status(HttpStatus.OK).body(new PropostaResponse(proposta));
     }
-
-
 }

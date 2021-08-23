@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CartaoConsultaClient {
+public class CartaoJob {
 
     private final PropostaRepository propostaRepository;
     private final ClientCartao clientCartao;
 
-    public CartaoConsultaClient(PropostaRepository propostaRepository,
-                                ClientCartao clientCartao) {
+    public CartaoJob(PropostaRepository propostaRepository,
+                     ClientCartao clientCartao) {
         this.propostaRepository = propostaRepository;
         this.clientCartao = clientCartao;
     }
@@ -27,7 +27,8 @@ public class CartaoConsultaClient {
 
         //Localiza as propostas que estão com status ELEGIVEL e sem cartão emitido
         List<Proposta> propostas = propostaRepository
-                .findAllByPropostaStatus(PropostaStatus.ELEGIVEL)
+                .findFirst100ByPropostaStatus(PropostaStatus.ELEGIVEL)
+                //Valida que a lista não tenha proposta com cartão emitido
                 .stream().filter(proposta -> proposta.getCartao() == null)
                 .collect(Collectors.toList());
 
