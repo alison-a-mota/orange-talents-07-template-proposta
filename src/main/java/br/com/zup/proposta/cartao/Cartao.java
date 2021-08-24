@@ -2,7 +2,6 @@ package br.com.zup.proposta.cartao;
 
 import br.com.zup.proposta.cartao.bloqueio.Bloqueio;
 import br.com.zup.proposta.proposta.Proposta;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -41,8 +40,7 @@ public class Cartao {
     public Cartao() {
     }
 
-    public void atualizaStatus(String resultado) {
-        Assert.isTrue(resultado.equals("BLOQUEADO"), "Aconteceu um problema com o sistema de bloqueio");
+    public void atualizaStatus() {
         this.cartaoStatus = CartaoStatus.BLOQUEADO;
     }
 }
