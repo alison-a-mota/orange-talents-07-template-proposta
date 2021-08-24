@@ -1,11 +1,11 @@
 package br.com.zup.proposta.biometria;
 
 import br.com.zup.proposta.cartao.Cartao;
-import br.com.zup.proposta.compartilhado.anotacoes.IsBase64;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +22,7 @@ public class Biometria {
     @NotNull
     private Cartao cartao;
     @NotBlank
-    @IsBase64
+    @Pattern(regexp = "^(?:[A-Za-z\\d+/]{4})*(?:[A-Za-z\\d+/]{3}=|[A-Za-z\\d+/]{2}==)?$")
     @Column(unique = true)
     private String fingerprint;
 
