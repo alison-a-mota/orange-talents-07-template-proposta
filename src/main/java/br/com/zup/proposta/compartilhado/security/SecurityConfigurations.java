@@ -1,4 +1,4 @@
-package br.com.zup.proposta.compartilhado.serity;
+package br.com.zup.proposta.compartilhado.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +19,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.GET, "/api/proposta/**").hasAnyAuthority("SCOPE_escopo-proposta")
                         .antMatchers(HttpMethod.POST, "/api/proposta/**").hasAnyAuthority("SCOPE_escopo-proposta")
                         .antMatchers(HttpMethod.POST, "/api/cartao/**").hasAnyAuthority("SCOPE_escopo-proposta")
+                        .antMatchers(HttpMethod.PATCH, "/api/cartao/**").hasAnyAuthority("SCOPE_escopo-proposta")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 

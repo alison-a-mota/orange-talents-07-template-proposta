@@ -1,6 +1,5 @@
 package br.com.zup.proposta.proposta;
 
-import br.com.zup.proposta.compartilhado.anotacoes.CampoUnico;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 
 import javax.validation.constraints.Email;
