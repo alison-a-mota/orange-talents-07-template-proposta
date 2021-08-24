@@ -1,4 +1,4 @@
-package br.com.zup.proposta.clients;
+package br.com.zup.proposta.compartilhado.clients;
 
 import br.com.zup.proposta.proposta.analise.AnaliseRequest;
 import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;

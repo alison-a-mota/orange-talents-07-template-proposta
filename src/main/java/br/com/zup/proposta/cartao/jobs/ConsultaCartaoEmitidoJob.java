@@ -1,6 +1,8 @@
-package br.com.zup.proposta.cartao;
+package br.com.zup.proposta.cartao.jobs;
 
-import br.com.zup.proposta.clients.ClientCartao;
+import br.com.zup.proposta.cartao.Cartao;
+import br.com.zup.proposta.cartao.CartaoResponseClient;
+import br.com.zup.proposta.compartilhado.clients.ClientCartao;
 import br.com.zup.proposta.proposta.Proposta;
 import br.com.zup.proposta.proposta.PropostaRepository;
 import br.com.zup.proposta.proposta.PropostaStatus;
@@ -11,19 +13,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CartaoJob {
+public class ConsultaCartaoEmitidoJob {
 
     private final PropostaRepository propostaRepository;
     private final ClientCartao clientCartao;
 
-    public CartaoJob(PropostaRepository propostaRepository,
-                     ClientCartao clientCartao) {
+    public ConsultaCartaoEmitidoJob(PropostaRepository propostaRepository,
+                                    ClientCartao clientCartao) {
         this.propostaRepository = propostaRepository;
         this.clientCartao = clientCartao;
     }
 
-    @Scheduled(fixedDelayString = "${api.cartoes.delay.getcartoes}")
-    private void consultaClientCartao() {
+    @Scheduled(fixedDelayString = "${api.cartoes.delay.consultaCartaoEmitidoClient}")
+    private void consultaCartaoEmitidoClient() {
 
         //Localiza as propostas que estão com status ELEGIVEL e sem cartão emitido
         List<Proposta> propostas = propostaRepository

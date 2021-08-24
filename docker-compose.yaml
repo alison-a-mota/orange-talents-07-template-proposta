@@ -60,7 +60,7 @@ services:
   postgres_proposta:
     image: 'postgres:9.6-alpine'
     volumes:
-      - propostas-volume:/var/lib/postgresql/data
+      - aplicacao-volume:/var/lib/postgresql/data
     ports:
       - 5433:5432
     environment:
@@ -116,6 +116,8 @@ services:
 
   contas:
     image: 'zupacademy/contas'
+    volumes:
+      - contas-volume:/var/lib/
     ports:
       - 8888:8888
     environment:
@@ -191,4 +193,5 @@ volumes:
   grafana-volume:
   prometheus-volume:
   postgres-volume:
-  propostas-volume:
+  aplicacao-volume:
+  contas-volume:

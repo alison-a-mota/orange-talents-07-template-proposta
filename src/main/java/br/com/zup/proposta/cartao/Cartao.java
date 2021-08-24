@@ -33,6 +33,10 @@ public class Cartao {
         return cartaoStatus;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Deprecated
     public Cartao() {
     }

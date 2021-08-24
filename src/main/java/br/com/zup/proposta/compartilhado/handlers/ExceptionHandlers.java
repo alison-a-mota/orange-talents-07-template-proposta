@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.net.ConnectException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,11 @@ public class ExceptionHandlers {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> interceptaBeanValidation(IllegalArgumentException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> interceptaBeanValidation(ConstraintViolationException exception) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
     }
 
     @ExceptionHandler(ConnectException.class)

@@ -1,7 +1,7 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.cartao.Cartao;
-import br.com.zup.proposta.clients.ClientAnalise;
+import br.com.zup.proposta.compartilhado.clients.ClientAnalise;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 import br.com.zup.proposta.proposta.analise.AnaliseRequest;
 import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;

@@ -1,4 +1,4 @@
-package br.com.zup.proposta.biometria;
+package br.com.zup.proposta.cartao.biometria;
 
 import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.cartao.CartaoRepository;
@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/cartao")
 public class BiometriaController {
 
     private final CartaoRepository cartaoRepository;
@@ -29,7 +29,7 @@ public class BiometriaController {
      * @param biometriaRequest É obrigatório passar uma string com o fingerprint e precisa ser Base64.
      * @param cartaoId         É obrigatório.
      */
-    @PostMapping("/api/cartao/{cartaoId}/biometria")
+    @PostMapping("/{cartaoId}/biometria")
     public ResponseEntity<URI> cria(@Valid @RequestBody BiometriaRequest biometriaRequest, @PathVariable Long cartaoId) {
 
         //Valida se o cartão existe, caso exista, armazena o objeto

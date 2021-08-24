@@ -1,4 +1,4 @@
-package br.com.zup.proposta.biometria;
+package br.com.zup.proposta.cartao.biometria;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
