@@ -32,7 +32,7 @@ public class Bloqueio {
         this.userAgent = userAgent;
         this.cartao = cartao;
 
-        cartao.atualizaStatus();
+        cartao.atualizaParaBloqueado();
     }
 
     public Cartao getCartao() {

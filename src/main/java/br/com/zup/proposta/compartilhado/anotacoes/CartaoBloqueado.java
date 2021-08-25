@@ -1,7 +1,6 @@
 package br.com.zup.proposta.compartilhado.anotacoes;
 
 import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

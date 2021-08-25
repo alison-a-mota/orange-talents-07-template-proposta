@@ -1,28 +1,23 @@
 package br.com.zup.proposta.proposta;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
 public enum PropostaStatus {
 
+    EM_ANALISE,
     CARTAO_EMITIDO,
     NAO_ELEGIVEL,
     ELEGIVEL;
 
     /**
-     * Devolve o status da proposta conforme o retorno da análise.
+     * Devolve o status da proposta correto.
      */
     public static PropostaStatus normalizaStatus(String s) {
-        if (s == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A análise não retornou uma resposta válida");
-        }
 
-        if (s.equals("SEM_RESTRICAO")) {
+        if (s.equals("SEM_RESTRICAO") || s.equals("ELEGIVEL")) {
             return PropostaStatus.ELEGIVEL;
         }
         if (s.equals("COM_RESTRICAO")) {
             return PropostaStatus.NAO_ELEGIVEL;
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deu pau");
+        return PropostaStatus.EM_ANALISE;
     }
 }

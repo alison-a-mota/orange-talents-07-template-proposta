@@ -35,9 +35,10 @@ public class PropostaRequest {
     private String cep;
 
     public Proposta toModel() {
-        Endereco endereco = new Endereco(this.rua, this.numero,
+        var endereco = new Endereco(this.rua, this.numero,
                 this.complemento, this.cidade, this.estado, this.cep);
-        return new Proposta(nome, email, documento, salario, endereco);
+        var status = "EM_ANALISE";
+        return new Proposta(nome, email, documento, salario, endereco, status);
     }
 
     public String getNome() {

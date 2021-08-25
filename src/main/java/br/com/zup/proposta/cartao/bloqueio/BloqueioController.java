@@ -4,7 +4,6 @@ import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.cartao.CartaoRepository;
 import br.com.zup.proposta.compartilhado.anotacoes.CartaoBloqueado;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,16 +22,14 @@ public class BloqueioController {
     }
 
     @PostMapping("/{cartaoId}/bloqueio")
-    public ResponseEntity<?> bloqueia(@RequestHeader("User-Agent") String userAgent,
-                                      @RequestHeader("X-Forwarded-For") String ipUsuario,
-                                      @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId) {
+    public void bloqueia(@RequestHeader("User-Agent") String userAgent,
+                         @RequestHeader("X-Forwarded-For") String ipUsuario,
+                         @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId) {
 
-        Cartao cartao = cartaoRepository.findById(cartaoId).orElseThrow(() ->
+        var cartao = cartaoRepository.findById(cartaoId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "O cartão não foi encontrado"));
 
-        Bloqueio bloqueio = new BloqueioRequest().toModel(ipUsuario, userAgent, cartao);
+        var bloqueio = new BloqueioRequest().toModel(ipUsuario, userAgent, cartao);
         bloqueioRepository.save(bloqueio);
-
-        return ResponseEntity.ok().build();
     }
 }

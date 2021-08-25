@@ -1,11 +1,7 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.cartao.Cartao;
-import br.com.zup.proposta.compartilhado.clients.ClientAnalise;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
-import br.com.zup.proposta.proposta.analise.AnaliseRequest;
-import br.com.zup.proposta.proposta.analise.AnaliseResponseClient;
-import feign.FeignException;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -45,12 +41,13 @@ public class Proposta {
     @OneToOne(cascade = CascadeType.ALL)
     private Cartao cartao;
 
-    public Proposta(String nome, String email, String documento, BigDecimal salario, Endereco endereco) {
+    public Proposta(String nome, String email, String documento, BigDecimal salario, Endereco endereco, String status) {
         this.nome = nome;
         this.email = email;
         this.documento = documento;
         this.salario = salario;
         this.endereco = endereco;
+        this.propostaStatus = PropostaStatus.normalizaStatus(status);
     }
 
     public void setCartaoEAtualizaStatus(Cartao cartao) {
@@ -62,19 +59,8 @@ public class Proposta {
         this.propostaStatus = PropostaStatus.CARTAO_EMITIDO;
     }
 
-    public void analisaEAtualizaStatus(ClientAnalise clientAnalise) {
-        AnaliseRequest request = new AnaliseRequest(this);
-
-        try {
-            AnaliseResponseClient analiseResponse = clientAnalise.analisaSolicitacao(request);
-            atualizaStatus(analiseResponse.getStatus());
-        } catch (FeignException.UnprocessableEntity ex) {
-            atualizaStatus(PropostaStatus.NAO_ELEGIVEL);
-        }
-    }
-
-    private void atualizaStatus(PropostaStatus status) {
-        propostaStatus = status;
+    public void atualizaStatus(String status) {
+        this.propostaStatus = PropostaStatus.normalizaStatus(status);
     }
 
     @Deprecated

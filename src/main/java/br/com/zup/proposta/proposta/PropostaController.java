@@ -1,6 +1,5 @@
 package br.com.zup.proposta.proposta;
 
-import br.com.zup.proposta.compartilhado.clients.ClientAnalise;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +14,14 @@ import java.net.URI;
 public class PropostaController {
 
     private final PropostaRepository propostaRepository;
-    private final ClientAnalise clientAnalise;
 
-    public PropostaController(PropostaRepository propostaRepository, ClientAnalise clientAnalise) {
+    public PropostaController(PropostaRepository propostaRepository) {
         this.propostaRepository = propostaRepository;
-        this.clientAnalise = clientAnalise;
     }
 
     @PostMapping
-    public ResponseEntity<URI> cria(@RequestBody @Valid PropostaRequest propostaRequest) {
+    public ResponseEntity<URI> cria(@RequestBody @Valid PropostaRequest propostaRequest,
+                                    UriComponentsBuilder uriComponentsBuilder) {
 
         //Valida se já existe uma proposta para esse documento e retorna 422 se existir.
         if (propostaRepository.existsByDocumento(propostaRequest.getDocumento())) {
@@ -34,22 +32,16 @@ public class PropostaController {
         Proposta proposta = propostaRequest.toModel();
         propostaRepository.save(proposta);
 
-        proposta.analisaEAtualizaStatus(clientAnalise);
-        propostaRepository.save(proposta);
-
-        URI uri = UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("www.linktemporario/api")
-                .path("proposta/" + proposta.getId())
+        var uri = uriComponentsBuilder
+                .path("/api/proposta/" + proposta.getId())
                 .buildAndExpand().toUri();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .location(uri).build();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{propostaId}")
     public ResponseEntity<PropostaResponse> detalha(@PathVariable Long propostaId) {
-        Proposta proposta = propostaRepository.findById(propostaId).orElseThrow(() ->
+        var proposta = propostaRepository.findById(propostaId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Não encontramos uma proposta com esse Id."));
 

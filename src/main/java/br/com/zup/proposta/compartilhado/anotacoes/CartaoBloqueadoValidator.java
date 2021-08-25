@@ -5,7 +5,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
 
 public class CartaoBloqueadoValidator implements ConstraintValidator<CartaoBloqueado, Object> {
 
@@ -26,7 +25,7 @@ public class CartaoBloqueadoValidator implements ConstraintValidator<CartaoBloqu
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if(value == null){
+        if (value == null) {
             return true;
         }
 
@@ -34,7 +33,7 @@ public class CartaoBloqueadoValidator implements ConstraintValidator<CartaoBloqu
         query.setParameter("value", value);
         query.setParameter("value2", value2);
 
-        List<?> resultList = query.getResultList();
+        var resultList = query.getResultList();
         return resultList.isEmpty();
     }
 }

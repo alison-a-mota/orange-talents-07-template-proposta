@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 import java.net.ConnectException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -18,11 +17,11 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> interceptaBeanValidation(MethodArgumentNotValidException exception) {
-        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        String campos = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
-        String mensagens = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
+        var fieldErrors = exception.getBindingResult().getFieldErrors();
+        var campos = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
+        var mensagens = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
 
-        ExceptionResponse response = new ExceptionResponse(campos, mensagens, String.valueOf(HttpStatus.BAD_REQUEST));
+        var response = new ExceptionResponse(campos, mensagens, String.valueOf(HttpStatus.BAD_REQUEST));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }

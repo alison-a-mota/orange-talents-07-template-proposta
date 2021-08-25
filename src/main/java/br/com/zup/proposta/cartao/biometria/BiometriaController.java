@@ -1,6 +1,5 @@
 package br.com.zup.proposta.cartao.biometria;
 
-import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.cartao.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,22 +29,26 @@ public class BiometriaController {
      * @param cartaoId         É obrigatório.
      */
     @PostMapping("/{cartaoId}/biometria")
-    public ResponseEntity<URI> cria(@Valid @RequestBody BiometriaRequest biometriaRequest, @PathVariable Long cartaoId) {
+    public ResponseEntity<URI> cria(@Valid @RequestBody BiometriaRequest biometriaRequest,
+                                    @PathVariable Long cartaoId,
+                                    UriComponentsBuilder uriComponentsBuilder) {
+
+        //Verifica se essa biometria já foi cadastrada para esse cartão
+        if(biometriaRepository.existsByCartaoIdAndFingerprint(cartaoId, biometriaRequest.getFingerprint())){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Esta biometria já está cadastrada para este cartão");
+        }
 
         //Valida se o cartão existe, caso exista, armazena o objeto
-        Cartao cartao = cartaoRepository.findById(cartaoId).orElseThrow(() ->
+        var cartao = cartaoRepository.findById(cartaoId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi encontrado cartão com esse Id."));
 
-        Biometria biometria = biometriaRequest.toModel(cartao);
+        var biometria = biometriaRequest.toModel(cartao);
         biometriaRepository.save(biometria);
 
-        URI uri = UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("www.linktemporario/api")
-                .path("biometria/" + biometria.getId())
+        var uri = uriComponentsBuilder
+                .path("/api/cartao/biometria/" + biometria.getId())
                 .buildAndExpand().toUri();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .location(uri).build();
+        return ResponseEntity.created(uri).build();
     }
 }

@@ -3,7 +3,6 @@ package br.com.zup.proposta.cartao.jobs;
 import br.com.zup.proposta.cartao.viagem.AvisoViagem;
 import br.com.zup.proposta.cartao.viagem.AvisoViagemRepository;
 import br.com.zup.proposta.cartao.viagem.AvisoViagemRequestClient;
-import br.com.zup.proposta.cartao.viagem.AvisoViagemResponseClient;
 import br.com.zup.proposta.compartilhado.clients.ClientCartao;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -28,14 +26,14 @@ public class AvisaViagemJob {
     @Scheduled(fixedDelayString = "${api.cartoes.delay.avisaViagem}")
     public void avisaViagem() {
 
-        List<AvisoViagem> avisos = avisoViagemRepository.findFirst100ByComunicado(false)
+        var avisos = avisoViagemRepository.findFirst100ByComunicado(false)
                 .stream().filter(AvisoViagem::getAtivo)
                 .collect(Collectors.toList());
 
         avisos.forEach(avisoViagem -> {
 
             try {
-                AvisoViagemResponseClient responseClient = clientCartao
+                var responseClient = clientCartao
                         .avisaViagem(avisoViagem.getCartao().getNumeroCartao(),
                                 new AvisoViagemRequestClient(avisoViagem.getDestino(), avisoViagem.getValidoAte()));
 

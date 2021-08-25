@@ -12,10 +12,6 @@ public class BloqueioCartaoResponseClient {
         return resultado;
     }
 
-    public void setResultado(String resultado) {
-        this.resultado = resultado;
-    }
-
     @Deprecated
     public BloqueioCartaoResponseClient() {
     }

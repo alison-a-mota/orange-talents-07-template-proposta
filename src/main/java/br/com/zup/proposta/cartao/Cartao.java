@@ -1,6 +1,5 @@
 package br.com.zup.proposta.cartao;
 
-import br.com.zup.proposta.cartao.bloqueio.Bloqueio;
 import br.com.zup.proposta.proposta.Proposta;
 
 import javax.persistence.*;
@@ -40,7 +39,7 @@ public class Cartao {
     public Cartao() {
     }
 
-    public void atualizaStatus() {
+    public void atualizaParaBloqueado() {
         this.cartaoStatus = CartaoStatus.BLOQUEADO;
     }
 }
