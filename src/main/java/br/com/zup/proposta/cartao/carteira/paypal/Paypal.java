@@ -28,6 +28,10 @@ public class Paypal implements Carteira {
         this.cartao = cartao;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Deprecated
     public Paypal() {
     }

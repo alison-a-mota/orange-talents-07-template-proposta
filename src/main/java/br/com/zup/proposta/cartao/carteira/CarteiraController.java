@@ -8,12 +8,15 @@ import br.com.zup.proposta.compartilhado.anotacoes.CartaoBloqueado;
 import br.com.zup.proposta.compartilhado.clients.ClientCartao;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/cartao")
@@ -35,8 +38,9 @@ public class CarteiraController {
     }
 
     @PostMapping("/{cartaoId}/carteira/paypal")
-    public void associaPaypal(@Valid @RequestBody CarteiraRequest request,
-                              @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId) {
+    public ResponseEntity<URI> associaPaypal(@Valid @RequestBody CarteiraRequest request,
+                                             @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId,
+                                             UriComponentsBuilder uriComponentsBuilder) {
 
         if(paypalRepository.existsByCartaoId(cartaoId))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -46,11 +50,18 @@ public class CarteiraController {
         var paypal = request.toModelPaypal(cartao);
         paypalRepository.save(paypal);
 
+        var uri = uriComponentsBuilder
+                .path("/api/cartao/carteira/paypal" + paypal.getId())
+                .buildAndExpand().toUri();
+
+        return ResponseEntity.created(uri).build();
+
     }
 
     @PostMapping("/{cartaoId}/carteira/samsung-pay")
-    public void associaSamsungPay(@Valid @RequestBody CarteiraRequest request,
-                                  @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId) {
+    public ResponseEntity<URI> associaSamsungPay(@Valid @RequestBody CarteiraRequest request,
+                                  @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId,
+                                  UriComponentsBuilder uriComponentsBuilder) {
 
         if(samsungPayRepository.existsByCartaoId(cartaoId))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -59,6 +70,12 @@ public class CarteiraController {
         var cartao = processa(cartaoId, request);
         var samsungPay = request.toModelSamsung(cartao);
         samsungPayRepository.save(samsungPay);
+
+        var uri = uriComponentsBuilder
+                .path("/api/cartao/carteira/samsung-pay" + samsungPay.getId())
+                .buildAndExpand().toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
     private Cartao processa(Long cartaoId, CarteiraRequest request) {

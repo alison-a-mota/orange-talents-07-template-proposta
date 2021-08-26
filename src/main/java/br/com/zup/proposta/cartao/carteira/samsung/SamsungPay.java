@@ -28,6 +28,10 @@ public class SamsungPay implements Carteira {
         this.cartao = cartao;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Deprecated
     public SamsungPay() {
     }
