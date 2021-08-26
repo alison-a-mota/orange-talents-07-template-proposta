@@ -3,6 +3,8 @@ package br.com.zup.proposta.compartilhado.clients;
 import br.com.zup.proposta.cartao.CartaoResponseClient;
 import br.com.zup.proposta.cartao.bloqueio.BloqueioCartaoResponseClient;
 import br.com.zup.proposta.cartao.bloqueio.BloqueioCartaoRequestClient;
+import br.com.zup.proposta.cartao.carteira.CarteiraRequestClient;
+import br.com.zup.proposta.cartao.carteira.CarteiraResponseClient;
 import br.com.zup.proposta.cartao.viagem.AvisoViagemResponseClient;
 import br.com.zup.proposta.cartao.viagem.AvisoViagemRequestClient;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -21,4 +23,7 @@ public interface ClientCartao {
 
     @PostMapping("/{cartaoId}/avisos")
     AvisoViagemResponseClient avisaViagem(@RequestParam String cartaoId, AvisoViagemRequestClient request);
+
+    @PostMapping("/{cartaoId}/carteiras")
+    CarteiraResponseClient associaCarteira(@RequestParam String cartaoId, CarteiraRequestClient request);
 }

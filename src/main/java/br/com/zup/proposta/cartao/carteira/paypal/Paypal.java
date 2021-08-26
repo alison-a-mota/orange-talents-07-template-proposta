@@ -4,6 +4,8 @@ import br.com.zup.proposta.cartao.Cartao;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Paypal {
@@ -13,8 +15,15 @@ public class Paypal {
     @Column(updatable = false)
     private Long id;
 
+    @NotBlank
     @Email
     private String email;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
+    @NotNull
     private Cartao cartao;
+
+    public Paypal(String email, Cartao cartao) {
+        this.email = email;
+        this.cartao = cartao;
+    }
 }
