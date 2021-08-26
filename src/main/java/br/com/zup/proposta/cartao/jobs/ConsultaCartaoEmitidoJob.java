@@ -21,7 +21,7 @@ public class ConsultaCartaoEmitidoJob {
     }
 
     @Scheduled(fixedDelayString = "${api.cartoes.delay.consultaCartaoEmitidoClient}")
-    private void consultaCartaoEmitidoClient() {
+    public void consultaCartaoEmitidoClient() {
 
         //Localiza as propostas que estão com status ELEGIVEL e sem cartão emitido
         var propostas = propostaRepository

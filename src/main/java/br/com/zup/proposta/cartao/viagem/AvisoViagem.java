@@ -4,6 +4,7 @@ import br.com.zup.proposta.cartao.Cartao;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class AvisoViagem {
     @NotBlank
     private String destino;
     @NotNull
+    @FutureOrPresent
     private LocalDate validoAte;
     private Boolean ativo = true;
     private String ipCliente;
