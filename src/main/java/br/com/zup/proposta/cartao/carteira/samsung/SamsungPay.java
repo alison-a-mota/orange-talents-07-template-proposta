@@ -1,4 +1,4 @@
-package br.com.zup.proposta.cartao.carteira.paypal;
+package br.com.zup.proposta.cartao.carteira.samsung;
 
 import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.cartao.carteira.Carteira;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Paypal implements Carteira {
+public class SamsungPay implements Carteira {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +23,12 @@ public class Paypal implements Carteira {
     @NotNull
     private Cartao cartao;
 
-    public Paypal(@NotBlank @Email String email, @NotNull Cartao cartao) {
+    public SamsungPay(@NotBlank @Email String email, @NotNull Cartao cartao) {
         this.email = email;
         this.cartao = cartao;
     }
 
     @Deprecated
-    public Paypal() {
+    public SamsungPay() {
     }
 }

@@ -2,6 +2,7 @@ package br.com.zup.proposta.cartao.carteira;
 
 import br.com.zup.proposta.cartao.Cartao;
 import br.com.zup.proposta.cartao.carteira.paypal.Paypal;
+import br.com.zup.proposta.cartao.carteira.samsung.SamsungPay;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,13 +14,17 @@ public class CarteiraRequest {
     @Email
     private String email;
     @NotNull
-    private String carteira;
+    private TipoCarteira carteira;
 
-    public Paypal toModel(Cartao cartao) {
+    public SamsungPay toModelSamsung(Cartao cartao) {
+        return new SamsungPay(email, cartao);
+    }
+
+    public Paypal toModelPaypal(Cartao cartao) {
         return new Paypal(email, cartao);
     }
 
-    public CarteiraRequest(String email, String carteira) {
+    public CarteiraRequest(@NotBlank String email, @NotNull TipoCarteira carteira) {
         this.email = email;
         this.carteira = carteira;
     }
@@ -28,7 +33,7 @@ public class CarteiraRequest {
         return email;
     }
 
-    public String getCarteira() {
+    public TipoCarteira getCarteira() {
         return carteira;
     }
 }
