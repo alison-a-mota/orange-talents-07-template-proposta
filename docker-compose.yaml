@@ -7,6 +7,8 @@ services:
 
   proposta-webservice:
     image: alisonalvesmota/proposta
+    volumes:
+      - proposta-webservice-volume:/var/lib/proposta
     ports:
       - 8081:8080
     environment:
@@ -20,6 +22,8 @@ services:
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"
+    volumes:
+      - zookeeper-volume:/var/lib/zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -29,6 +33,8 @@ services:
 
   kafka:
     image: "confluentinc/cp-kafka:5.2.1"
+    volumes:
+      - kafka-volume:/var/lib/kafka
     ports:
       - 9092:9092
     depends_on:
@@ -73,6 +79,8 @@ services:
 
   keycloak:
     image: jboss/keycloak:11.0.0
+    volumes:
+      - keycloak-volume:/var/lib/keycloak
     ports:
       - 18443:8443
       - 18080:8080
@@ -104,6 +112,8 @@ services:
 
   analise:
     image: 'zupacademy/analise-financeira'
+    volumes:
+      - analise-volume:/var/lib/analise
     ports:
       - 9999:9999
     environment:
@@ -129,6 +139,8 @@ services:
 
   transacoes:
     image: 'zupacademy/transacoes'
+    volumes:
+      - transacoes-volume:/var/lib/jaeger
     ports:
       - 7777:7777
     depends_on:
@@ -143,6 +155,8 @@ services:
 
   jaeger:
     image: jaegertracing/all-in-one:1.21.0
+    volumes:
+      - jaeger-volume:/var/lib/jaeger
     ports:
       - 5775:5775/udp
       - 6831:6831/udp
@@ -160,7 +174,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.22.0
     volumes:
-    #  - ./prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./prometheus.yml:/etc/prometheus/prometheus.yml
      - prometheus-volume:/etc/prometheus/
     ports:
       - "9090:9090"
@@ -180,6 +194,8 @@ services:
 
   vault:
     image: vault:1.5.3
+    volumes:
+      - valt-volume:/var/lib/valt
     ports:
       - 8200:8200
     environment:
@@ -195,3 +211,11 @@ volumes:
   postgres-volume:
   aplicacao-volume:
   contas-volume:
+  valt-volume:
+  jaeger-volume:
+  transacoes-volume:
+  analise-volume:
+  keycloak-volume:
+  kafka-volume:
+  zookeeper-volume:
+  proposta-webservice-volume:
