@@ -1,7 +1,8 @@
 package br.com.zup.proposta.proposta;
 
 import br.com.zup.proposta.cartao.Cartao;
-import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
+import br.com.zup.proposta.compartilhado.HashCode;
+import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -10,6 +11,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+
+import static java.security.MessageDigest.*;
 
 @Entity
 public class Proposta {
@@ -18,6 +23,8 @@ public class Proposta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private Long id;
+    @Column(updatable = false, unique = true)
+    private byte[] hashDocumento;
 
     @NotBlank
     private String nome;
@@ -25,7 +32,6 @@ public class Proposta {
     @Email
     private String email;
     @NotBlank
-    @CpfOuCnpj
     @Column(unique = true)
     private String documento;
     @NotNull
@@ -41,13 +47,20 @@ public class Proposta {
     @OneToOne(cascade = CascadeType.ALL)
     private Cartao cartao;
 
-    public Proposta(String nome, String email, String documento, BigDecimal salario, Endereco endereco, String status) {
+    /**
+     * @param hashCode Este construtor recebe um documento em formato de String (documento limpo) e converte em HashCode
+     *                 para comparações e validações, e criptografa para usar os dados quando necessário.
+     */
+    public Proposta(@NotBlank String nome, @NotBlank @Email String email, @NotBlank String documento,
+                    @NotNull @Positive BigDecimal salario, @NotNull Endereco endereco,
+                    String status, HashCode hashCode) throws NoSuchAlgorithmException {
         this.nome = nome;
         this.email = email;
-        this.documento = documento;
+        this.documento = Encryptors.text("abcabc", "cbacba").encrypt(documento);
         this.salario = salario;
         this.endereco = endereco;
         this.propostaStatus = PropostaStatus.normalizaStatus(status);
+        this.hashDocumento = hashCode.gerarHash(documento);
     }
 
     public void setCartaoEAtualizaStatus(Cartao cartao) {

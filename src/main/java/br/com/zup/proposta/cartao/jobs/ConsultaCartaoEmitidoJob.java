@@ -3,6 +3,7 @@ package br.com.zup.proposta.cartao.jobs;
 import br.com.zup.proposta.compartilhado.clients.ClientCartao;
 import br.com.zup.proposta.proposta.PropostaRepository;
 import br.com.zup.proposta.proposta.PropostaStatus;
+import feign.FeignException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +32,15 @@ public class ConsultaCartaoEmitidoJob {
                 .collect(Collectors.toList());
 
         propostas.forEach(proposta -> {
-            var response = clientCartao.getCartoes(proposta.getId().toString());
-            if (response.getId() != null) {
-                var cartao = response.toModel(proposta);
-                proposta.setCartaoEAtualizaStatus(cartao);
-                propostaRepository.save(proposta);
+            try {
+                var response = clientCartao.getCartoes(proposta.getId().toString());
+                if (response.getId() != null) {
+                    var cartao = response.toModel(proposta);
+                    proposta.setCartaoEAtualizaStatus(cartao);
+                    propostaRepository.save(proposta);
+                }
+            }catch (FeignException.InternalServerError ex){
+
             }
         });
     }

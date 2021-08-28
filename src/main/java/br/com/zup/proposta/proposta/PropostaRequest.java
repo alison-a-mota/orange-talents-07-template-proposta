@@ -1,5 +1,6 @@
 package br.com.zup.proposta.proposta;
 
+import br.com.zup.proposta.compartilhado.HashCode;
 import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 
 import javax.validation.constraints.Email;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 
 public class PropostaRequest {
 
@@ -34,11 +36,10 @@ public class PropostaRequest {
     @NotBlank
     private String cep;
 
-    public Proposta toModel() {
+    public Proposta toModel(HashCode hashCode) throws NoSuchAlgorithmException {
         var endereco = new Endereco(this.rua, this.numero,
                 this.complemento, this.cidade, this.estado, this.cep);
-        var status = "EM_ANALISE";
-        return new Proposta(nome, email, documento, salario, endereco, status);
+        return new Proposta(nome, email, documento, salario, endereco, "EM_ANALISE", hashCode);
     }
 
     public String getNome() {

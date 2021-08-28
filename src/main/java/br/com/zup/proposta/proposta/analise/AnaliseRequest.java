@@ -1,15 +1,18 @@
 package br.com.zup.proposta.proposta.analise;
 
+import br.com.zup.proposta.compartilhado.anotacoes.CpfOuCnpj;
 import br.com.zup.proposta.proposta.Proposta;
+import org.springframework.security.crypto.encrypt.Encryptors;
 
 public class AnaliseRequest {
 
-    private String idProposta;
-    private String nome;
-    private String documento;
+    private final String idProposta;
+    private final String nome;
+    @CpfOuCnpj
+    private final String documento;
 
     public AnaliseRequest(Proposta proposta) {
-        this.documento = proposta.getDocumento();
+        this.documento = Encryptors.text("abcabc", "cbacba").decrypt(proposta.getDocumento());
         this.nome = proposta.getNome();
         this.idProposta = proposta.getId().toString();
     }
@@ -24,14 +27,5 @@ public class AnaliseRequest {
 
     public String getDocumento() {
         return documento;
-    }
-
-    @Override
-    public String toString() {
-        return "AnaliseRequest{" +
-                "idProposta='" + idProposta + '\'' +
-                ", nome='" + nome + '\'' +
-                ", documento='" + documento + '\'' +
-                '}';
     }
 }
