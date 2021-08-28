@@ -11,10 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-
-import static java.security.MessageDigest.*;
 
 @Entity
 public class Proposta {
