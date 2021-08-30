@@ -37,6 +37,13 @@ public class CarteiraController {
         this.clientCartao = clientCartao;
     }
 
+
+
+    // Indicação do Yuri para poder resolver o problema de dois métodos "toModel"
+    // https://stackoverflow.com/questions/27545276/how-to-implement-a-spring-data-repository-for-a-mappedsuperclass
+
+
+
     @PostMapping("/{cartaoId}/carteira/paypal")
     public ResponseEntity<URI> associaPaypal(@Valid @RequestBody CarteiraRequest request,
                                              @CartaoBloqueado(fieldName = "id", domainClass = Cartao.class) @PathVariable Long cartaoId,

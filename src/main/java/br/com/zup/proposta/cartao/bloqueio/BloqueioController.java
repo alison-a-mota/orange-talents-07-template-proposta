@@ -15,10 +15,12 @@ public class BloqueioController {
 
     private final CartaoRepository cartaoRepository;
     private final BloqueioRepository bloqueioRepository;
+    private final BloqueiaCartaoService bloqueiaCartaoService;
 
-    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository) {
+    public BloqueioController(CartaoRepository cartaoRepository, BloqueioRepository bloqueioRepository, BloqueiaCartaoService bloqueiaCartaoService) {
         this.cartaoRepository = cartaoRepository;
         this.bloqueioRepository = bloqueioRepository;
+        this.bloqueiaCartaoService = bloqueiaCartaoService;
     }
 
     @PostMapping("/{cartaoId}/bloqueio")
@@ -28,6 +30,9 @@ public class BloqueioController {
 
         var cartao = cartaoRepository.findById(cartaoId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "O cartão não foi encontrado"));
+
+        //Comunica com a API externa para bloquear o cartão
+        bloqueiaCartaoService.bloqueiaCartao(cartao);
 
         var bloqueio = new BloqueioRequest().toModel(ipUsuario, userAgent, cartao);
         bloqueioRepository.save(bloqueio);

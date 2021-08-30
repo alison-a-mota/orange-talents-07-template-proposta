@@ -39,8 +39,7 @@ public class ConsultaCartaoEmitidoJob {
                     proposta.setCartaoEAtualizaStatus(cartao);
                     propostaRepository.save(proposta);
                 }
-            }catch (FeignException.InternalServerError ex){
-
+            } catch (FeignException.InternalServerError ignored) {
             }
         });
     }
